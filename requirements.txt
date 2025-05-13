@@ -1,0 +1,11 @@
+PyQt5>=5.15.0
+selenium>=4.0.0
+APScheduler>=3.6.0
+pynput>=1.7.0
+requests>=2.25.0
+screeninfo>=0.8.1
+pyautogui>=0.9.53
+psutil>=5.9.0
+webdriver-manager>=3.8.0
+pyinstaller>=5.0.0
+python-dateutil>=2.8.2 
