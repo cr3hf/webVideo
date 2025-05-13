@@ -13,7 +13,7 @@ from recorder.recorder import recorder_instance
 from screeninfo import get_monitors
 from browser.browser_controller import browser_controller_instance
 from browser.clicker import Clicker
-from utils.common import get_ffmpeg_path
+from utils.common import get_ffmpeg_path, validate_live_url
 import os
 import logging
 
@@ -23,6 +23,23 @@ def get_icon_path():
     else:
         return os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'icon.ico')
 
+def get_app_version():
+    """
+    从VERSION.md文件中获取应用版本号
+    """
+    try:
+        version_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'VERSION.md')
+        if os.path.exists(version_path):
+            with open(version_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                # 使用正则表达式匹配版本号
+                match = re.search(r'## 版本\s+([\d\.]+)', content)
+                if match:
+                    return match.group(1)
+        return "1.0.0"  # 默认版本号
+    except Exception:
+        return "1.0.0"  # 出错时返回默认版本号
+
 class MainWindow(QWidget):
     schedule_start_signal = pyqtSignal()
     schedule_stop_signal = pyqtSignal()
@@ -31,6 +48,9 @@ class MainWindow(QWidget):
         self.config = config
         self.scheduler = scheduler
         self.setWindowIcon(QIcon(get_icon_path()))
+        
+        # 获取应用版本号
+        self.app_version = get_app_version()
         
         # 将窗口实例传递给scheduler，以便在录制结束时启用UI控件
         if hasattr(self.scheduler, 'set_main_window'):
@@ -57,7 +77,8 @@ class MainWindow(QWidget):
         self.is_recording = False
 
     def init_ui(self):
-        self.setWindowTitle('网页直播录制工具')
+        # 设置窗口标题，包含版本号
+        self.setWindowTitle(f'网页直播录制工具 v{self.app_version}')
         self.setMinimumSize(550, 550)  # 增加最小宽度
         self.setStyleSheet("""
             QWidget {
@@ -378,9 +399,9 @@ class MainWindow(QWidget):
         recurring_layout.setSpacing(10)
         
         # 启用循环任务选项
-        self.enable_recurring = QCheckBox("启用循环任务")
-        self.enable_recurring.setFixedHeight(24)
-        recurring_layout.addWidget(self.enable_recurring)
+        self.enable_recurring_input = QCheckBox("启用循环任务")
+        self.enable_recurring_input.setFixedHeight(24)
+        recurring_layout.addWidget(self.enable_recurring_input)
         
         # 循环日期选项
         recurring_days_layout = QGridLayout()
@@ -389,47 +410,47 @@ class MainWindow(QWidget):
         recurring_days_layout.setColumnStretch(2, 1)
         recurring_days_layout.setColumnStretch(3, 1)
         
-        self.recurring_everyday = QCheckBox("每天")
-        self.recurring_everyday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_everyday, 0, 0)
+        self.everyday_check = QCheckBox("每天")
+        self.everyday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.everyday_check, 0, 0)
         
-        self.recurring_monday = QCheckBox("周一")
-        self.recurring_monday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_monday, 1, 0)
+        self.monday_check = QCheckBox("周一")
+        self.monday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.monday_check, 1, 0)
         
-        self.recurring_tuesday = QCheckBox("周二")
-        self.recurring_tuesday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_tuesday, 1, 1)
+        self.tuesday_check = QCheckBox("周二")
+        self.tuesday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.tuesday_check, 1, 1)
         
-        self.recurring_wednesday = QCheckBox("周三")
-        self.recurring_wednesday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_wednesday, 1, 2)
+        self.wednesday_check = QCheckBox("周三")
+        self.wednesday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.wednesday_check, 1, 2)
         
-        self.recurring_thursday = QCheckBox("周四")
-        self.recurring_thursday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_thursday, 1, 3)
+        self.thursday_check = QCheckBox("周四")
+        self.thursday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.thursday_check, 1, 3)
         
-        self.recurring_friday = QCheckBox("周五")
-        self.recurring_friday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_friday, 2, 0)
+        self.friday_check = QCheckBox("周五")
+        self.friday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.friday_check, 2, 0)
         
-        self.recurring_saturday = QCheckBox("周六")
-        self.recurring_saturday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_saturday, 2, 1)
+        self.saturday_check = QCheckBox("周六")
+        self.saturday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.saturday_check, 2, 1)
         
-        self.recurring_sunday = QCheckBox("周日")
-        self.recurring_sunday.setFixedHeight(24)
-        recurring_days_layout.addWidget(self.recurring_sunday, 2, 2)
+        self.sunday_check = QCheckBox("周日")
+        self.sunday_check.setFixedHeight(24)
+        recurring_days_layout.addWidget(self.sunday_check, 2, 2)
         
         # 连接每天选项与其他日期选项的互斥关系
-        self.recurring_everyday.stateChanged.connect(self.on_everyday_changed)
-        self.recurring_monday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_tuesday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_wednesday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_thursday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_friday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_saturday.stateChanged.connect(self.on_specific_day_changed)
-        self.recurring_sunday.stateChanged.connect(self.on_specific_day_changed)
+        self.everyday_check.stateChanged.connect(self.on_everyday_changed)
+        self.monday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.tuesday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.wednesday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.thursday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.friday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.saturday_check.stateChanged.connect(self.on_specific_day_changed)
+        self.sunday_check.stateChanged.connect(self.on_specific_day_changed)
         
         recurring_days_note = QLabel("注：录制结束后将自动设置下一个周期的开始时间并开始倒计时")
         recurring_days_note.setWordWrap(True)
@@ -489,9 +510,9 @@ class MainWindow(QWidget):
         auto_grid.addWidget(col3_label, 0, 2)
         
         # 自定义按键1
-        self.custom_key1_enabled = QCheckBox("自定义按键1:")
-        self.custom_key1_enabled.setFixedHeight(24)
-        auto_grid.addWidget(self.custom_key1_enabled, 1, 2)
+        self.custom_key1_check = QCheckBox("自定义按键1:")
+        self.custom_key1_check.setFixedHeight(24)
+        auto_grid.addWidget(self.custom_key1_check, 1, 2)
         
         self.custom_key1_input = QLineEdit()
         self.custom_key1_input.setFixedWidth(80)
@@ -502,9 +523,9 @@ class MainWindow(QWidget):
         auto_grid.addWidget(self.custom_key1_input, 1, 3)
         
         # 自定义按键2
-        self.custom_key2_enabled = QCheckBox("自定义按键2:")
-        self.custom_key2_enabled.setFixedHeight(24)
-        auto_grid.addWidget(self.custom_key2_enabled, 2, 2)
+        self.custom_key2_check = QCheckBox("自定义按键2:")
+        self.custom_key2_check.setFixedHeight(24)
+        auto_grid.addWidget(self.custom_key2_check, 2, 2)
         
         self.custom_key2_input = QLineEdit()
         self.custom_key2_input.setFixedWidth(80)
@@ -702,28 +723,46 @@ class MainWindow(QWidget):
         self.bilibili_fullscreen_input.setChecked(self.config.get('enable_bilibili_fullscreen', False))
         
         # 自定义按键选项
-        self.custom_key1_enabled.setChecked(self.config.get('custom_key1_enabled', False))
+        self.custom_key1_check.setChecked(self.config.get('custom_key1_enabled', False))
         self.custom_key1_input.setText(self.config.get('custom_key1', ''))
-        self.custom_key2_enabled.setChecked(self.config.get('custom_key2_enabled', False))
+        self.custom_key2_check.setChecked(self.config.get('custom_key2_enabled', False))
         self.custom_key2_input.setText(self.config.get('custom_key2', ''))
         
         # 循环任务设置 - 先加载各个星期的设置
         recurring_days = self.config.get('recurring_days', {})
-        self.recurring_monday.setChecked(recurring_days.get('monday', False))
-        self.recurring_tuesday.setChecked(recurring_days.get('tuesday', False))
-        self.recurring_wednesday.setChecked(recurring_days.get('wednesday', False))
-        self.recurring_thursday.setChecked(recurring_days.get('thursday', False))
-        self.recurring_friday.setChecked(recurring_days.get('friday', False))
-        self.recurring_saturday.setChecked(recurring_days.get('saturday', False))
-        self.recurring_sunday.setChecked(recurring_days.get('sunday', False))
+        self.monday_check.setChecked(recurring_days.get('monday', False))
+        self.tuesday_check.setChecked(recurring_days.get('tuesday', False))
+        self.wednesday_check.setChecked(recurring_days.get('wednesday', False))
+        self.thursday_check.setChecked(recurring_days.get('thursday', False))
+        self.friday_check.setChecked(recurring_days.get('friday', False))
+        self.saturday_check.setChecked(recurring_days.get('saturday', False))
+        self.sunday_check.setChecked(recurring_days.get('sunday', False))
         
         # 然后设置"每天"选项，这样会自动处理所有日期的勾选状态
-        self.enable_recurring.setChecked(self.config.get('enable_recurring', False))
+        self.enable_recurring_input.setChecked(self.config.get('enable_recurring', False))
         everyday_checked = recurring_days.get('everyday', False)
-        self.recurring_everyday.setChecked(everyday_checked)
+        self.everyday_check.setChecked(everyday_checked)
 
     def save_ui_to_config(self):
-        self.config['douyin_url'] = self.url_input.text()
+        # 先获取静默模式的设置
+        silent_mode = self.silent_input.isChecked()
+        
+        # 获取URL
+        url = self.url_input.text().strip()
+        
+        # 验证和处理URL，如果是静默模式则不验证
+        processed_url, is_valid, error_message = validate_live_url(url, silent_mode=silent_mode)
+        
+        # 更新输入框为处理后的URL
+        if processed_url != url:
+            self.url_input.setText(processed_url)
+            
+        # 保存到配置
+        self.config['douyin_url'] = processed_url
+        self.config['url_is_valid'] = is_valid
+        self.config['url_error_message'] = error_message
+        
+        # 继续保存其他配置项
         self.config['start_time'] = self.start_time_input.dateTime().toString('yyyy-MM-dd HH:mm:ss')
         self.config['duration_minutes'] = self.duration_input.value()
         self.config['save_path'] = self.save_path_input.text()
@@ -732,52 +771,50 @@ class MainWindow(QWidget):
         self.config['resolution'] = self.resolution_input.currentText()
         self.config['monitor_index'] = self.monitor_input.currentIndex()
         self.config['audio_device'] = self.audio_input.currentText()
-        self.config['framerate'] = self.framerate_input.currentText()
-        self.config['record_quality'] = self.quality_input.currentText()
-        self.config['silent_mode'] = self.silent_input.isChecked()
+        self.config['silent_mode'] = silent_mode
         self.config['enable_fullscreen'] = self.fullscreen_input.isChecked()
         self.config['enable_unmute'] = self.unmute_input.isChecked()
         self.config['enable_browser_fullscreen'] = self.browser_fullscreen_input.isChecked()
         self.config['enable_bilibili_fullscreen'] = self.bilibili_fullscreen_input.isChecked()
-        # 自定义按键
-        self.config['custom_key1_enabled'] = self.custom_key1_enabled.isChecked()
+        self.config['framerate'] = self.framerate_input.currentText()
+        self.config['record_quality'] = self.quality_input.currentText()
+        
+        self.config['custom_key1_enabled'] = self.custom_key1_check.isChecked()
         self.config['custom_key1'] = self.custom_key1_input.text()
-        self.config['custom_key2_enabled'] = self.custom_key2_enabled.isChecked()
+        self.config['custom_key2_enabled'] = self.custom_key2_check.isChecked()
         self.config['custom_key2'] = self.custom_key2_input.text()
         
-        # 循环任务设置
-        self.config['enable_recurring'] = self.enable_recurring.isChecked()
+        # 保存循环任务设置
+        self.config['enable_recurring'] = self.enable_recurring_input.isChecked()
+        self.config['recurring_days'] = {
+            'monday': self.monday_check.isChecked(),
+            'tuesday': self.tuesday_check.isChecked(),
+            'wednesday': self.wednesday_check.isChecked(),
+            'thursday': self.thursday_check.isChecked(),
+            'friday': self.friday_check.isChecked(),
+            'saturday': self.saturday_check.isChecked(),
+            'sunday': self.sunday_check.isChecked(),
+            'everyday': self.everyday_check.isChecked()
+        }
         
-        if 'recurring_days' not in self.config:
-            self.config['recurring_days'] = {}
-            
-        # 保存"每天"选项状态
-        everyday_checked = self.recurring_everyday.isChecked()
-        self.config['recurring_days']['everyday'] = everyday_checked
-        
-        # 如果"每天"被勾选，则确保所有星期都被勾选（配置层面）
-        if everyday_checked:
-            self.config['recurring_days']['monday'] = True
-            self.config['recurring_days']['tuesday'] = True
-            self.config['recurring_days']['wednesday'] = True
-            self.config['recurring_days']['thursday'] = True
-            self.config['recurring_days']['friday'] = True
-            self.config['recurring_days']['saturday'] = True
-            self.config['recurring_days']['sunday'] = True
-        else:
-            # 否则，保存每个星期的实际勾选状态
-            self.config['recurring_days']['monday'] = self.recurring_monday.isChecked()
-            self.config['recurring_days']['tuesday'] = self.recurring_tuesday.isChecked()
-            self.config['recurring_days']['wednesday'] = self.recurring_wednesday.isChecked()
-            self.config['recurring_days']['thursday'] = self.recurring_thursday.isChecked()
-            self.config['recurring_days']['friday'] = self.recurring_friday.isChecked()
-            self.config['recurring_days']['saturday'] = self.recurring_saturday.isChecked()
-            self.config['recurring_days']['sunday'] = self.recurring_sunday.isChecked()
-        
+        # 保存配置
         save_config(self.config)
 
     def on_start_record(self):
         self.save_ui_to_config()
+        
+        # 检查URL是否有效，如果不是静默模式
+        if not self.silent_input.isChecked() and not self.config.get('url_is_valid', True):
+            # 显示错误消息
+            error_message = self.config.get('url_error_message', "地址非法，改为纯录屏模式")
+            QMessageBox.warning(self, '提示', error_message)
+            
+            # 强制设置为静默模式（纯录屏）
+            self.config['silent_mode'] = True
+            self.silent_input.setChecked(True)
+            
+            # 重新保存配置
+            self.save_ui_to_config()
         
         # 计数器递增
         self.click_count += 1
@@ -808,10 +845,10 @@ class MainWindow(QWidget):
         if hasattr(self.scheduler, 'scheduler'):
             self.scheduler.config = self.config  # 更新调度器配置
             self.scheduler.schedule_recording()
-            
-            # 开始倒计时
-            self.start_countdown()
-            
+        
+        # 开始倒计时
+        self.start_countdown()
+
     def reset_click_counter(self):
         """重置点击计数器"""
         self.click_count = 0
@@ -823,6 +860,19 @@ class MainWindow(QWidget):
         # 保存当前UI设置到配置
         self.save_ui_to_config()
         
+        # 检查URL有效性，如果不是静默模式且URL无效，则切换到纯录屏模式
+        if not self.config.get('silent_mode', False) and not self.config.get('url_is_valid', True):
+            # 显示错误消息
+            error_message = self.config.get('url_error_message', "地址非法，改为纯录屏模式")
+            QMessageBox.warning(self, '提示', error_message)
+            
+            # 强制设置为静默模式（纯录屏）
+            self.config['silent_mode'] = True
+            self.silent_input.setChecked(True)
+            
+            # 重新保存配置
+            self.save_ui_to_config()
+            
         self.is_recording = True
         self.stop_countdown()
         self.disable_all_settings(True)
@@ -846,23 +896,27 @@ class MainWindow(QWidget):
             }
         """)
         QApplication.processEvents()
-        # 打开浏览器并自动化操作
-        browser_controller_instance.silent_mode = self.config.get('silent_mode', False)
-        browser_controller_instance.open_live_page(
-            self.config['douyin_url'],
-            monitor_index=self.config.get('monitor_index', 0),
-            fullscreen=self.config.get('enable_fullscreen', True),
-            unmute=self.config.get('enable_unmute', True),
-            browser_fullscreen=self.config.get('enable_browser_fullscreen', False),
-            bilibili_fullscreen=self.config.get('enable_bilibili_fullscreen', False),
-            custom_key1_enabled=self.config.get('custom_key1_enabled', False),
-            custom_key1=self.config.get('custom_key1', ''),
-            custom_key2_enabled=self.config.get('custom_key2_enabled', False),
-            custom_key2=self.config.get('custom_key2', '')
-        )
-        # 启动定时点击
-        self.clicker = Clicker(browser_controller_instance.driver, interval=60)
-        self.clicker.start()
+        
+        # 只有在URL有效且不是静默模式的情况下才打开浏览器
+        if not self.config.get('silent_mode', False) and self.config.get('url_is_valid', True):
+            # 打开浏览器并自动化操作
+            browser_controller_instance.silent_mode = self.config.get('silent_mode', False)
+            browser_controller_instance.open_live_page(
+                self.config['douyin_url'],
+                monitor_index=self.config.get('monitor_index', 0),
+                fullscreen=self.config.get('enable_fullscreen', True),
+                unmute=self.config.get('enable_unmute', True),
+                browser_fullscreen=self.config.get('enable_browser_fullscreen', False),
+                bilibili_fullscreen=self.config.get('enable_bilibili_fullscreen', False),
+                custom_key1_enabled=self.config.get('custom_key1_enabled', False),
+                custom_key1=self.config.get('custom_key1', ''),
+                custom_key2_enabled=self.config.get('custom_key2_enabled', False),
+                custom_key2=self.config.get('custom_key2', '')
+            )
+            # 启动定时点击
+            self.clicker = Clicker(browser_controller_instance.driver, interval=60)
+            self.clicker.start()
+            
         # 配置完成，切换为录制中
         now = datetime.now()
         self.config['start_time'] = now.strftime('%Y-%m-%d %H:%M:%S')
@@ -981,20 +1035,20 @@ class MainWindow(QWidget):
         self.browser_fullscreen_input.setDisabled(disabled)
         self.bilibili_fullscreen_input.setDisabled(disabled)
         self.custom_key1_input.setDisabled(disabled)
-        self.custom_key1_enabled.setDisabled(disabled)
+        self.custom_key1_check.setDisabled(disabled)
         self.custom_key2_input.setDisabled(disabled)
-        self.custom_key2_enabled.setDisabled(disabled)
+        self.custom_key2_check.setDisabled(disabled)
         
         # 循环任务设置
-        self.enable_recurring.setDisabled(disabled)
-        self.recurring_everyday.setDisabled(disabled)
-        self.recurring_monday.setDisabled(disabled)
-        self.recurring_tuesday.setDisabled(disabled)
-        self.recurring_wednesday.setDisabled(disabled)
-        self.recurring_thursday.setDisabled(disabled)
-        self.recurring_friday.setDisabled(disabled)
-        self.recurring_saturday.setDisabled(disabled)
-        self.recurring_sunday.setDisabled(disabled)
+        self.enable_recurring_input.setDisabled(disabled)
+        self.everyday_check.setDisabled(disabled)
+        self.monday_check.setDisabled(disabled)
+        self.tuesday_check.setDisabled(disabled)
+        self.wednesday_check.setDisabled(disabled)
+        self.thursday_check.setDisabled(disabled)
+        self.friday_check.setDisabled(disabled)
+        self.saturday_check.setDisabled(disabled)
+        self.sunday_check.setDisabled(disabled)
         
         # 更新UI
         QApplication.processEvents()
@@ -1144,37 +1198,37 @@ class MainWindow(QWidget):
     def on_everyday_changed(self, state):
         if state == Qt.Checked:
             # 如果勾选"每天"，则自动勾选所有特定日期
-            self.recurring_monday.setChecked(True)
-            self.recurring_tuesday.setChecked(True)
-            self.recurring_wednesday.setChecked(True)
-            self.recurring_thursday.setChecked(True)
-            self.recurring_friday.setChecked(True)
-            self.recurring_saturday.setChecked(True)
-            self.recurring_sunday.setChecked(True)
+            self.monday_check.setChecked(True)
+            self.tuesday_check.setChecked(True)
+            self.wednesday_check.setChecked(True)
+            self.thursday_check.setChecked(True)
+            self.friday_check.setChecked(True)
+            self.saturday_check.setChecked(True)
+            self.sunday_check.setChecked(True)
         # 当取消勾选"每天"时，不再自动取消所有日期的勾选，保持当前状态
 
     def on_specific_day_changed(self, state):
         # 如果取消勾选了某一天，只需要取消"每天"的勾选
-        if state == Qt.Unchecked and self.recurring_everyday.isChecked():
-            self.recurring_everyday.setChecked(False)
+        if state == Qt.Unchecked and self.everyday_check.isChecked():
+            self.everyday_check.setChecked(False)
             # 取消勾选某一天时，不影响其他天的选择状态
             return
             
         # 检查是否选中了所有天
         all_days_checked = (
-            self.recurring_monday.isChecked() and
-            self.recurring_tuesday.isChecked() and
-            self.recurring_wednesday.isChecked() and
-            self.recurring_thursday.isChecked() and
-            self.recurring_friday.isChecked() and
-            self.recurring_saturday.isChecked() and
-            self.recurring_sunday.isChecked()
+            self.monday_check.isChecked() and
+            self.tuesday_check.isChecked() and
+            self.wednesday_check.isChecked() and
+            self.thursday_check.isChecked() and
+            self.friday_check.isChecked() and
+            self.saturday_check.isChecked() and
+            self.sunday_check.isChecked()
         )
         
         # 更新"每天"复选框的状态
         if all_days_checked:
             # 如果所有天都选中，则自动勾选"每天"
-            self.recurring_everyday.setChecked(True)
+            self.everyday_check.setChecked(True)
 
     # 添加closeEvent方法，在窗口关闭前保存配置
     def closeEvent(self, event):
@@ -1198,7 +1252,7 @@ def start_gui(config, scheduler):
     # 确保应用程序在退出前保存配置（额外保险措施）
     app.aboutToQuit.connect(lambda: shutdown_cleanup(window, config))
     
-    sys.exit(app.exec_())
+    sys.exit(app.exec_()) 
 
 def shutdown_cleanup(window, config):
     """程序退出前的清理工作"""

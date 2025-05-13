@@ -1,4 +1,6 @@
-2025-05-13 18:40:34,937 [INFO] 日志文件位置: D:\cr\Work\Project\VScode\My\webVideo\logs\app.log
-2025-05-13 18:40:34,950 [DEBUG] Looking up time zone info from registry
-2025-05-13 18:42:46,107 [INFO] 应用程序关闭，保存当前配置
-2025-05-13 18:42:46,169 [INFO] 程序即将退出，执行最终保存和清理
+2025-05-13 19:59:19,519 [INFO] 日志文件位置: D:\cr\Work\Project\VScode\My\webVideo\logs\app.log
+2025-05-13 19:59:19,527 [DEBUG] Looking up time zone info from registry
+2025-05-13 19:59:27,035 [INFO] 状态信息(不显示): 任务已取消
+2025-05-13 19:59:33,347 [INFO] 状态信息(不显示): 任务已取消
+2025-05-13 20:00:12,720 [INFO] 应用程序关闭，保存当前配置
+2025-05-13 20:00:12,791 [INFO] 程序即将退出，执行最终保存和清理
