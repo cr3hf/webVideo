@@ -66,6 +66,10 @@
 - **立即录制**：立即开始录制而不等待计划时间
 - **停止录制**：手动停止当前录制任务
 
+### 界面截图
+![image](https://github.com/user-attachments/assets/fa90df79-7df0-4021-b700-7b3e5eccf8cb)
+![image](https://github.com/user-attachments/assets/c520145f-7724-4038-bad4-de1493b41249)
+
 ## 开发指南
 
 ### 环境准备
