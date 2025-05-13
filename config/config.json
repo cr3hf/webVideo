@@ -1,0 +1,23 @@
+{
+    "douyin_url": "https://live.douyin.com/547977714661",
+    "start_time": "2025-05-08 17:43:15",
+    "duration_minutes": 1,
+    "save_path": "./videos",
+    "video_format": "mkv",
+    "video_codec": "h264",
+    "resolution": "640x360",
+    "audio_device": "立体声混音 (Realtek(R) Audio)",
+    "monitor_index": 1,
+    "audio_quality": "default",
+    "silent_mode": false,
+    "enable_fullscreen": true,
+    "enable_unmute": true,
+    "enable_browser_fullscreen": false,
+    "enable_bilibili_fullscreen": false,
+    "custom_key1_enabled": false,
+    "custom_key1": "",
+    "custom_key2_enabled": false,
+    "custom_key2": "",
+    "record_quality": "中",
+    "framerate": "20"
+}

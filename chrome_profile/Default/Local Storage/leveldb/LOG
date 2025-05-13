@@ -1,0 +1,15 @@
+2025/05/13-18:17:18.440 cee0 Reusing MANIFEST D:\cr\Work\Project\VScode\My\webVideo\chrome_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2025/05/13-18:17:18.444 cee0 Recovering log #53
+2025/05/13-18:17:18.446 cee0 Reusing old log D:\cr\Work\Project\VScode\My\webVideo\chrome_profile\Default\Local Storage\leveldb/000053.log 
+2025/05/13-18:18:18.462 c334 Level-0 table #57: started
+2025/05/13-18:18:18.467 c334 Level-0 table #57: 36165 bytes OK
+2025/05/13-18:18:18.468 c334 Delete type=0 #53
+2025/05/13-18:18:18.469 c334 Compacting 4@0 + 1@1 files
+2025/05/13-18:18:18.477 c334 Generated table #58@0: 118 keys, 64333 bytes
+2025/05/13-18:18:18.477 c334 Compacted 4@0 + 1@1 files => 64333 bytes
+2025/05/13-18:18:18.478 c334 compacted to: files[ 0 1 0 0 0 0 0 ]
+2025/05/13-18:18:18.479 c334 Delete type=2 #45
+2025/05/13-18:18:18.479 c334 Delete type=2 #48
+2025/05/13-18:18:18.479 c334 Delete type=2 #51
+2025/05/13-18:18:18.479 c334 Delete type=2 #54
+2025/05/13-18:18:18.479 c334 Delete type=2 #57
