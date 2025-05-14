@@ -28,7 +28,13 @@ def get_app_version():
     从VERSION.md文件中获取应用版本号
     """
     try:
+        # 首先检查当前目录
         version_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'VERSION.md')
+        
+        # 如果是打包的环境，使用不同的路径
+        if hasattr(sys, '_MEIPASS'):
+            version_path = os.path.join(sys._MEIPASS, 'VERSION.md')
+        
         if os.path.exists(version_path):
             with open(version_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -37,7 +43,8 @@ def get_app_version():
                 if match:
                     return match.group(1)
         return "1.0.0"  # 默认版本号
-    except Exception:
+    except Exception as e:
+        logging.error(f"读取版本号出错: {e}")
         return "1.0.0"  # 出错时返回默认版本号
 
 class MainWindow(QWidget):
