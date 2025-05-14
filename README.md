@@ -6,6 +6,10 @@
 
 本工具特别适合需要定期录制直播但无法实时操作的用户，如教育工作者、内容创作者、直播分析师等。通过简单的设置，用户可以实现全自动的直播内容采集，无需手动干预，大大提高工作效率。
 
+### 界面截图
+![image](https://github.com/user-attachments/assets/fa90df79-7df0-4021-b700-7b3e5eccf8cb)
+![image](https://github.com/user-attachments/assets/c520145f-7724-4038-bad4-de1493b41249)
+
 ### 核心优势
 
 - **多平台支持**：完美支持抖音、哔哩哔哩(B站)、斗鱼、虎牙等国内主流直播平台
@@ -26,7 +30,48 @@
 - **自定义分辨率**：可选择原始窗口分辨率或自定义输出分辨率，满足不同应用场景需求
 - **静默模式**：支持在后台运行，不显示浏览器窗口，避免干扰其他工作
 
-## 使用方法
+## 系统功能流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[初始化应用]
+    B --> C[加载配置]
+    C --> D[显示主界面]
+    D --> E[用户输入参数]
+    E --> F[保存配置]
+    F --> G{用户选择}
+    G -->|开始任务| H[创建调度任务]
+    G -->|立即录制| K[启动浏览器]
+    H --> I[等待预定时间]
+    I --> K
+    K --> L[打开直播页面]
+    L --> M[应用页面设置]
+    M --> N[开始FFmpeg录制]
+    N --> O[等待录制结束]
+    O --> P[停止录制]
+    P --> Q{是否循环任务?}
+    Q -->|是| C
+    Q -->|否| Z[结束]
+    
+    style A fill:#f96,stroke:#333,stroke-width:2px
+    style G fill:#bbf,stroke:#333,stroke-width:2px
+    style N fill:#9f9,stroke:#333,stroke-width:2px
+    style Q fill:#bbf,stroke:#333,stroke-width:2px
+    style Z fill:#f96,stroke:#333,stroke-width:2px
+```
+
+## 使用指南
+
+### GUI界面介绍
+
+应用采用现代化的用户界面，主要包含以下元素：
+
+1. **基本设置区**：顶部区域包含网页地址、时间设置等基本参数
+2. **视频设置区**：中部区域用于设置视频相关参数
+3. **高级选项区**：包含显示器选择、全屏模式等高级设置
+4. **定时任务区**：用于设置循环任务的时间表
+5. **控制按钮区**：底部区域包含开始/停止按钮以及状态显示
+6. **状态显示**：显示当前录制状态、倒计时和操作提示
 
 ### 基本设置
 
@@ -66,9 +111,44 @@
 - **立即录制**：立即开始录制而不等待计划时间
 - **停止录制**：手动停止当前录制任务
 
-### 界面截图
-![image](https://github.com/user-attachments/assets/fa90df79-7df0-4021-b700-7b3e5eccf8cb)
-![image](https://github.com/user-attachments/assets/c520145f-7724-4038-bad4-de1493b41249)
+## 技术实现
+
+### 数据流转图
+
+```mermaid
+graph LR
+    A[用户界面GUI] <--> B[配置管理]
+    B <--> C[持久化存储]
+    A <--> D[任务调度器]
+    D <--> E[录制控制器]
+    D <--> F[浏览器控制器]
+    F <--> G[网页直播]
+    E <--> H[FFmpeg进程]
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style D fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
+    style F fill:#fbb,stroke:#333,stroke-width:2px
+```
+
+### 技术要点
+
+1. **多线程处理**：使用线程分离UI和录制操作，保证界面响应性
+2. **自动化测试**：通过test_monitor.py测试显示器配置和FFmpeg参数
+3. **灵活配置**：通过config.json实现可持久化的用户配置
+4. **优雅关闭**：确保程序关闭时所有相关进程一并关闭
+5. **跨平台兼容**：设计兼容Windows系统环境
+6. **资源管理**：合理管理如浏览器配置、临时文件等资源
+
+### 开发环境与依赖
+
+本项目使用Python 3.8+开发，主要依赖以下库：
+- PyQt5: 用于构建图形界面
+- Selenium: 用于浏览器自动化控制
+- APScheduler: 用于任务调度
+- FFmpeg: 用于视频捕获和编码
+- screeninfo: 用于获取显示器信息
+
+详细依赖列表见requirements.txt文件。
 
 ## 开发指南
 
@@ -147,18 +227,9 @@
    - 打包过程需要一定时间，取决于项目大小和计算机性能
    - 打包完成的程序大小较大，因为包含了FFmpeg和Chrome配置
 
-## GUI界面介绍
+## 项目代码结构
 
-应用采用现代化的用户界面，主要包含以下元素：
-
-1. **基本设置区**：顶部区域包含网页地址、时间设置等基本参数
-2. **视频设置区**：中部区域用于设置视频相关参数
-3. **高级选项区**：包含显示器选择、全屏模式等高级设置
-4. **定时任务区**：用于设置循环任务的时间表
-5. **控制按钮区**：底部区域包含开始/停止按钮以及状态显示
-6. **状态显示**：显示当前录制状态、倒计时和操作提示
-
-## 项目目录结构
+### 项目目录结构
 
 ```
 webVideo/
@@ -196,9 +267,7 @@ webVideo/
 └── videos/                 # 录制视频保存目录
 ```
 
-## 主要文件功能说明
-
-### 核心文件
+### 核心文件功能说明
 
 1. **main.py**
    - 功能：程序入口文件，初始化日志、配置、调度器和GUI
@@ -253,71 +322,4 @@ webVideo/
    - 主要函数：
      - `load_config()`: 加载配置文件
      - `save_config()`: 保存配置文件
-     - `get_default_config()`: 获取默认配置
-
-## 数据流转图
-
-```mermaid
-graph LR
-    A[用户界面GUI] <--> B[配置管理]
-    B <--> C[持久化存储]
-    A <--> D[任务调度器]
-    D <--> E[录制控制器]
-    D <--> F[浏览器控制器]
-    F <--> G[网页直播]
-    E <--> H[FFmpeg进程]
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#bbf,stroke:#333,stroke-width:2px
-    style E fill:#bfb,stroke:#333,stroke-width:2px
-    style F fill:#fbb,stroke:#333,stroke-width:2px
-```
-
-## 系统功能流程图
-
-```mermaid
-flowchart TD
-    A[开始] --> B[初始化应用]
-    B --> C[加载配置]
-    C --> D[显示主界面]
-    D --> E[用户输入参数]
-    E --> F[保存配置]
-    F --> G{用户选择}
-    G -->|开始任务| H[创建调度任务]
-    G -->|立即录制| K[启动浏览器]
-    H --> I[等待预定时间]
-    I --> K
-    K --> L[打开直播页面]
-    L --> M[应用页面设置]
-    M --> N[开始FFmpeg录制]
-    N --> O[等待录制结束]
-    O --> P[停止录制]
-    P --> Q{是否循环任务?}
-    Q -->|是| C
-    Q -->|否| Z[结束]
-    
-    style A fill:#f96,stroke:#333,stroke-width:2px
-    style G fill:#bbf,stroke:#333,stroke-width:2px
-    style N fill:#9f9,stroke:#333,stroke-width:2px
-    style Q fill:#bbf,stroke:#333,stroke-width:2px
-    style Z fill:#f96,stroke:#333,stroke-width:2px
-```
-
-## 技术要点
-
-1. **多线程处理**：使用线程分离UI和录制操作，保证界面响应性
-2. **自动化测试**：通过test_monitor.py测试显示器配置和FFmpeg参数
-3. **灵活配置**：通过config.json实现可持久化的用户配置
-4. **优雅关闭**：确保程序关闭时所有相关进程一并关闭
-5. **跨平台兼容**：设计兼容Windows系统环境
-6. **资源管理**：合理管理如浏览器配置、临时文件等资源
-
-## 开发环境与依赖
-
-本项目使用Python 3.8+开发，主要依赖以下库：
-- PyQt5: 用于构建图形界面
-- Selenium: 用于浏览器自动化控制
-- APScheduler: 用于任务调度
-- FFmpeg: 用于视频捕获和编码
-- screeninfo: 用于获取显示器信息
-
-详细依赖列表见requirements.txt文件。 
+     - `get_default_config()`: 获取默认配置 
