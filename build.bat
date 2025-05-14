@@ -11,6 +11,7 @@ pyinstaller ^
   --clean ^
   --onefile ^
   --windowed ^
+  --name webVideoRecord ^
   --icon=assets\icon.ico ^
   --add-data "assets;assets" ^
   --add-data "config;config" ^
@@ -20,8 +21,12 @@ pyinstaller ^
   --add-data "scheduler;scheduler" ^
   --add-data "utils;utils" ^
   --add-data "ffmpeg;ffmpeg" ^
+  --add-data "VERSION.md;." ^
   main.py
 
+REM 3. 清理打包过程中产生的临时文件
+rmdir /s /q build
+
 echo.
-echo 打包完成！可执行文件在 dist 目录下。
+echo 打包完成！可执行文件：dist\webVideoRecord.exe
 pause 

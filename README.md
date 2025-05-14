@@ -85,7 +85,7 @@
 
 1. 克隆或下载代码仓库:
    ```
-   git clone [repo_url]
+   git clone https://github.com/cr3hf/webVideo.git
    cd webVideo
    ```
 
