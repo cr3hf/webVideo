@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('assets', 'assets'), ('config', 'config'), ('chrome_profile', 'chrome_profile'), ('recorder', 'recorder'), ('browser', 'browser'), ('scheduler', 'scheduler'), ('utils', 'utils'), ('ffmpeg', 'ffmpeg'), ('VERSION.md', '.')],
+    datas=[('assets', 'assets'), ('config', 'config'), ('recorder', 'recorder'), ('browser', 'browser'), ('scheduler', 'scheduler'), ('utils', 'utils'), ('ffmpeg', 'ffmpeg'), ('VERSION.md', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -15,7 +15,6 @@ pyinstaller ^
   --icon=assets\icon.ico ^
   --add-data "assets;assets" ^
   --add-data "config;config" ^
-  --add-data "chrome_profile;chrome_profile" ^
   --add-data "recorder;recorder" ^
   --add-data "browser;browser" ^
   --add-data "scheduler;scheduler" ^

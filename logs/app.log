@@ -1,4 +1,34 @@
-2025-05-13 20:09:13,389 [INFO] 日志文件位置: D:\cr\Work\Project\VScode\My\webVideo\logs\app.log
-2025-05-13 20:09:13,390 [DEBUG] Looking up time zone info from registry
-2025-05-13 20:09:15,656 [INFO] 应用程序关闭，保存当前配置
-2025-05-13 20:09:15,732 [INFO] 程序即将退出，执行最终保存和清理
+2025-05-21 19:04:39,143 [INFO] 日志文件位置: D:\cr\Work\Project\VScode\My\webVideo\logs\app.log
+2025-05-21 19:04:39,153 [DEBUG] Looking up time zone info from registry
+2025-05-21 19:04:46,981 [DEBUG] Starting new HTTP connection (1): localhost:37084
+2025-05-21 19:04:47,675 [DEBUG] http://localhost:37084 "POST /session HTTP/1.1" 200 0
+2025-05-21 19:04:47,682 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/execute/sync HTTP/1.1" 200 0
+2025-05-21 19:04:47,685 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/execute/sync HTTP/1.1" 200 0
+2025-05-21 19:04:47,689 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/execute/sync HTTP/1.1" 200 0
+2025-05-21 19:04:47,730 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/window/rect HTTP/1.1" 200 0
+2025-05-21 19:04:47,773 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/window/rect HTTP/1.1" 200 0
+2025-05-21 19:05:00,713 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/url HTTP/1.1" 200 0
+2025-05-21 19:05:05,721 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/window/rect HTTP/1.1" 200 0
+2025-05-21 19:05:05,723 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/window/rect HTTP/1.1" 200 0
+2025-05-21 19:05:05,782 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/window/maximize HTTP/1.1" 200 0
+2025-05-21 19:05:08,995 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/actions HTTP/1.1" 200 0
+2025-05-21 19:05:12,771 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/actions HTTP/1.1" 200 0
+2025-05-21 19:05:43,360 [DEBUG] http://localhost:37084 "POST /session/46dcccccc1b83acffd551cff963608f1/actions HTTP/1.1" 200 0
+2025-05-21 19:05:45,340 [DEBUG] http://localhost:37084 "DELETE /session/46dcccccc1b83acffd551cff963608f1 HTTP/1.1" 200 0
+2025-05-21 19:06:12,511 [INFO] 调度器触发stop_all方法
+2025-05-21 19:06:12,559 [INFO] 调度器触发停止录制
+2025-05-21 19:06:12,560 [INFO] 应用程序关闭，保存当前配置
+2025-05-21 19:06:12,583 [INFO] 启用了循环任务，手动调用下一个循环设置
+2025-05-21 19:06:12,584 [INFO] 当前循环设置: {'monday': False, 'tuesday': True, 'wednesday': True, 'thursday': True, 'friday': True, 'saturday': True, 'sunday': True, 'everyday': False}
+2025-05-21 19:06:12,584 [INFO] 当前任务时间: 2025-05-22 18:54:59
+2025-05-21 19:06:12,584 [INFO] 当前真实星期几: 2
+2025-05-21 19:06:12,585 [INFO] 启用的星期几: [1, 2, 3, 4, 5, 6]
+2025-05-21 19:06:12,585 [INFO] 下一个周期在本周，星期几: 3，相差天数: 1
+2025-05-21 19:06:12,585 [INFO] 计算出的下一个任务时间: 2025-05-22 18:54:59
+2025-05-21 19:06:12,585 [INFO] 更新配置中的开始时间为: 2025-05-22 18:54:59
+2025-05-21 19:06:12,587 [INFO] 配置已保存
+2025-05-21 19:06:12,587 [INFO] 生成新的任务ID: start_record_20250521190612
+2025-05-21 19:06:12,588 [INFO] 已重新调度任务
+2025-05-21 19:06:12,589 [INFO] 已更新UI中的开始时间
+2025-05-21 19:06:12,590 [INFO] 已启动新的倒计时
+2025-05-21 19:06:12,590 [INFO] 程序即将退出，执行最终保存和清理

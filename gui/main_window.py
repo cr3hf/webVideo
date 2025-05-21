@@ -507,7 +507,7 @@ class MainWindow(QWidget):
         auto_grid.addWidget(self.browser_fullscreen_input, 3, 1)
         
         # B站全屏(F键)
-        self.bilibili_fullscreen_input = QCheckBox("B站全屏(F键)")
+        self.bilibili_fullscreen_input = QCheckBox("B站/油管全屏(F键)")
         self.bilibili_fullscreen_input.setFixedHeight(24)
         auto_grid.addWidget(self.bilibili_fullscreen_input, 4, 1)
         

@@ -201,4 +201,5 @@ class BrowserController:
             return {"x": pos['x'], "y": pos['y'], "width": size['width'], "height": size['height']}
         return None
 
+# 创建单例实例
 browser_controller_instance = BrowserController()

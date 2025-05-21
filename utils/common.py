@@ -59,6 +59,10 @@ def validate_live_url(url: str, silent_mode: bool = False) -> tuple:
     if not url.startswith(('http://', 'https://')):
         url = 'http://' + url
     
+    # YouTube视频地址特殊处理
+    if 'youtube.com' in url or 'youtu.be' in url:
+        return url, True, ""
+    
     # 简单的URL格式校验
     url_pattern = r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
     
@@ -67,11 +71,16 @@ def validate_live_url(url: str, silent_mode: bool = False) -> tuple:
         'douyin.com', 'live.douyin.com',
         'bilibili.com', 'live.bilibili.com',
         'huya.com', 'douyu.com',
-        'kuaishou.com', 'live.kuaishou.com'
+        'kuaishou.com', 'live.kuaishou.com',
+        'youtube.com', 'youtu.be'  # 添加YouTube域名
     ]
     
     # 检查URL格式
     if not re.match(url_pattern, url):
+        # YouTube链接可能包含特殊查询参数，使用更宽松的验证
+        for domain in ['youtube.com', 'youtu.be']:
+            if domain in url:
+                return url, True, ""
         return url, False, "地址非法，改为纯录屏模式"
     
     # 检查是否是已知直播平台

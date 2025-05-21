@@ -1,4 +1,17 @@
 /.cursorrules
 /bac.bac
 /dist
+
+# Chrome 相关敏感数据
 /chrome_profile/
+/chrome_profile*/
+# 可能在其他位置的浏览器配置文件和凭据
+**/*chrome*profile*/
+**/Cookies
+**/Cookies-journal
+**/Login\ Data*
+**/History
+**/Web\ Data*
+**/Network/Cookies*
+**/*.pma # 浏览器指标文件
+**/Cache/Cache_Data/*
